@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Export</class>
+ <widget class="QWidget" name="Export">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>687</width>
+    <height>628</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background:'#0a2634';</string>
+  </property>
+  <widget class="QComboBox" name="exportType">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>260</y>
+     <width>301</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>-1</pointsize>
+    </font>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QComboBox {
+    background:&quot;#0a2634&quot;;
+    border:1px solid gray;
+    color:white;
+    outline: none;
+    padding-left:0px;
+	font-size:20px;
+   }
+   QComboBox::drop-down {
+    
+        border:0px;
+        margin-right:10px;
+
+    }
+    QComboBox::down-arrow {
+        image: url(&quot;:/images/res/images/dropdown.png&quot;);
+    }
+    QComboBox:pressed {
+        background: &quot;#0b1d2c&quot;; 
+    }
+    QComboBox:focus:pressed {
+        background: &quot;#003750&quot;;
+     }
+    QComboBox#changeTime:focus { 
+        background: &quot;#0b1d2c&quot;; 
+    }
+    QComboBox:hover {
+         background: &quot;#003750&quot;;
+    }
+
+    QComboBox:checked { 
+       background: &quot;#0b1d2c&quot;;
+    }
+    QComboBox:checked:hover {
+        background: &quot;#002d3&quot;;
+ }
+QComboBox:disabled { 
+    background: &quot;#0a2634&quot;;
+	color:gray;
+ }
+ QComboBox:item:hover{
+	background-color: &quot;#0a2634&quot;;
+	color: &quot;#0a2634&quot;;
+}
+QComboBox::item:selected {
+backgrounds: &quot;#0045ff&quot;;
+}
+
+QComboBox QAbstractItemView::item{color: blue;}
+QComboBox QAbstractItemView::item:hover{color: red;}
+QComboBox QAbstractItemView::item:selected{background-color: green;}</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="exportButton">
+   <property name="geometry">
+    <rect>
+     <x>440</x>
+     <y>250</y>
+     <width>111</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>18</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QPushButton { 
+ background-color: &quot;#002d3f&quot;;
+	border:1px solid gray;
+	color:white;
+	outline: none;
+	padding:10px;
+}
+
+QPushButton:pressed {
+   background-color: &quot;#002d3f&quot;;
+border:1px solid gray;
+	color:white;
+
+}
+QPushButton:focus:pressed { 
+    background: &quot;#003750&quot;;
+	border:1px solid #0adbf0;
+	color:white;
+
+ }
+QPushButton:focus { 
+   background-color: &quot;#002d3f&quot;;
+	border:1px solid gray;
+	color:white;
+
+}
+QPushButton:hover {
+     background-color: &quot;#002d3f&quot;;
+	border:1px solid #0adbf0;
+ }
+QPushButton:checked { 
+     background-color: &quot;#002d3f&quot;;
+border:1px solid gray;
+	color:white;
+
+ }
+QPushButton:disabled { 
+    background:'#0a2634';
+color:gray;
+border:1px solid gray;
+ }
+</string>
+   </property>
+   <property name="text">
+    <string>Export</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

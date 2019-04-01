@@ -17,7 +17,14 @@ public:
     explicit RPCConsole_Widget(QWidget *parent = 0);
     ~RPCConsole_Widget();
 
+    enum Tabs {
+        Info = 0,
+        Console = 1,
+        Network = 3,
+    };
+
     void setClientModel(ClientModel *model);
+    void setCurrentTab(Tabs tab);
 
     enum MessageClass {
         MC_ERROR,

@@ -33,6 +33,7 @@
 #include "init.h"
 #include "ui_interface.h"
 #include "forms/settings.h"
+#include "forms/export.h"
 
 #ifdef Q_OS_MAC
 #include "macdockiconhandler.h"
@@ -170,14 +171,14 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     labelBlocksIcon = new QLabel();
 
     frameBlocksLayout->addStretch();
-    frameBlocksLayout->addWidget(labelEncryptionIcon);
+    frameBlocksLayout->addWidget(labelBlocksIcon);
     frameBlocksLayout->addStretch();
     frameBlocksLayout->addWidget(labelStakingIcon);
     frameBlocksLayout->addStretch();
     frameBlocksLayout->addWidget(labelConnectionsIcon);
     frameBlocksLayout->addStretch();
-    frameBlocksLayout->addWidget(labelBlocksIcon);
-    frameBlocksLayout->addStretch();
+//    frameBlocksLayout->addWidget(labelBlocksIcon);
+//    frameBlocksLayout->addStretch();
 
     toolbar->addWidget(frameBlocks);
 
@@ -225,6 +226,17 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     connect(addressBookPage, SIGNAL(verifyMessage(QString)), this, SLOT(gotoVerifyMessageTab(QString)));
     // Clicking on "Sign Message" in the receive coins page sends you to the sign message tab
     connect(receiveCoinsPage, SIGNAL(signMessage(QString)), this, SLOT(gotoSignMessageTab(QString)));
+
+    settingsPage->connectExternalAction(Settings::Encrypt, this, SLOT(encryptWallet()));
+    settingsPage->connectExternalAction(Settings::Backup, this, SLOT(backupWallet()));
+    settingsPage->connectExternalAction(Settings::Sign, this, SLOT(gotoSignMessageTab()));
+    settingsPage->connectExternalAction(Settings::Verify, this, SLOT(gotoVerifyMessageTab()));
+    settingsPage->connectExternalAction(Settings::Change, this, SLOT(changePassphrase()));
+    settingsPage->connectExternalAction(Settings::Options, this, SLOT(optionsDlgClicked()));
+
+    settingsPage->connectExportAction(Export::Transactions, transactionView, SLOT(exportClicked()));
+    settingsPage->connectExportAction(Export::ReceiveAddresses, receiveCoinsPage, SLOT(exportClicked()));
+    settingsPage->connectExportAction(Export::AddressBook, addressBookPage, SLOT(exportClicked()));
 
     gotoOverviewPage();
 }
@@ -330,6 +342,8 @@ void BitcoinGUI::createActions()
 
     lockActionBar= new QAction(QIcon(":/images/res/images/lock.png"),tr("&LOCK"), this);
     settingsActionBar= new QAction(QIcon(":/images/res/images/settings.png"),tr("&SETTINGS"), this);
+    spaceActionBar = new QAction(this);
+    spaceActionBar->setEnabled(false);
 
     connect(settingsActionBar, SIGNAL(triggered()), this, SLOT(optionsClicked()));
     connect(lockActionBar, SIGNAL(triggered()), this, SLOT(toggleLock()));
@@ -399,7 +413,7 @@ void BitcoinGUI::createToolBars()
     toolbar->setContextMenuPolicy(Qt::PreventContextMenu);
 
     toolbar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    toolbar->setStyleSheet("QToolBar { background: '#15202d';padding:0px }QToolButton:disabled { color:gray} QToolButton { padding: 10px;width: 100%;color:white;background: '#15202d'; margin:0px; border:none } QToolButton:hover{ background: '#1e2e3f'} QToolButton:checked{ background: '#1e2e3f'; font:bold;padding-left:15px; color:white;border-right:3px solid '#0adbf0'; }");
+    toolbar->setStyleSheet("QToolBar { background: '#15202d';padding:0px; padding-bottom:80px}QToolButton:disabled { color:gray} QToolButton { padding: 6px;width: 100%;color:white;background: '#15202d'; margin:0px; border:none } QToolButton:hover{ background: '#1e2e3f'} QToolButton:checked{ background: '#1e2e3f'; font:bold;padding-left:15px; color:white;border-right:3px solid '#0adbf0'; }");
 
     logoMenu = new QLabel();
 
@@ -430,6 +444,7 @@ void BitcoinGUI::createToolBars()
     toolbar->addWidget(makeToolBarSpacer());
     toolbar->addAction(settingsActionBar);
     toolbar->addAction(lockActionBar);
+    toolbar->addAction(spaceActionBar);
 
 
     toolbar->setOrientation(Qt::Vertical);
@@ -573,12 +588,15 @@ void BitcoinGUI::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 
 void BitcoinGUI::optionsClicked()
 {
-    /*
+
+/*
     if(!clientModel || !clientModel->getOptionsModel())
         return;
     OptionsDialog dlg;
     dlg.setModel(clientModel->getOptionsModel());
-    dlg.exec();*/
+    dlg.exec();
+*/
+
     overviewAction->setChecked(false);
     historyAction->setChecked(false);
     sendCoinsAction->setChecked(false);
@@ -591,6 +609,15 @@ void BitcoinGUI::aboutClicked()
 {
     AboutDialog dlg;
     dlg.setModel(clientModel);
+    dlg.exec();
+}
+
+void BitcoinGUI::optionsDlgClicked()
+{
+    if(!clientModel || !clientModel->getOptionsModel())
+        return;
+    OptionsDialog dlg;
+    dlg.setModel(clientModel->getOptionsModel());
     dlg.exec();
 }
 
@@ -947,6 +974,7 @@ void BitcoinGUI::setEncryptionStatus(int status)
         unlockWalletAction->setVisible(false);
         lockWalletAction->setVisible(false);
         encryptWalletAction->setEnabled(true);
+        settingsPage->setEncryptionEnabled(true);
         lockActionBar->setEnabled(false);
         break;
     case WalletModel::Unlocked:
@@ -957,6 +985,7 @@ void BitcoinGUI::setEncryptionStatus(int status)
         unlockWalletAction->setVisible(false);
         lockWalletAction->setVisible(true);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
+        settingsPage->setEncryptionEnabled(false);
         lockActionBar->setEnabled(true);
         break;
     case WalletModel::Locked:
@@ -967,6 +996,7 @@ void BitcoinGUI::setEncryptionStatus(int status)
         lockActionBar->setText("UNLOCK");
         lockWalletAction->setVisible(false);
         encryptWalletAction->setEnabled(false); // TODO: decrypt currently not supported
+        settingsPage->setEncryptionEnabled(false);
         lockActionBar->setEnabled(true);
         break;
     }

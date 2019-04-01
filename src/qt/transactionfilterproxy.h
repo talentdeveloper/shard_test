@@ -36,13 +36,15 @@ public:
     void setShowInactive(bool showInactive);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    QDateTime dateFrom;
-    QDateTime dateTo;
+
 protected:
     bool filterAcceptsRow(int source_row, const QModelIndex & source_parent) const;
 
 private:
 
+    QDateTime temp;
+    QDateTime dateFrom;
+    QDateTime dateTo;
     QString addrPrefix;
     quint32 typeFilter;
     qint64 minAmount;

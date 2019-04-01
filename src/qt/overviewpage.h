@@ -74,6 +74,7 @@ private:
     //QChart* chart;
     TxViewDelegate *txdelegate;
     TransactionFilterProxy *filter;
+    double realtimePrice;
 
 
 private slots:

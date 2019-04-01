@@ -48,7 +48,10 @@ void TxViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     QRect typeRect(decorationRect.left() + xspace, mainRect.top()+ypad+halfheight, mainRect.width() - xspace -decorationRect.width()-65, halfheight);
     QRect dateRect2(mainRect.topLeft(), QSize(DECORATION_SIZE, DECORATION_SIZE));
 
+    QRect addressRectMain(decorationRect.left() + 100, mainRect.top(), DECORATION_SIZE+350, DECORATION_SIZE);
 
+    QString addressMain = index.data(TransactionTableModel::AddressRole).toString();
+    // painter->drawText(addressRectMain, Qt::AlignLeft|Qt::AlignVCenter, addressMain);
 
     QDateTime date = index.data(TransactionTableModel::DateRole).toDateTime();
     QString address = index.data(Qt::DisplayRole).toString();
@@ -81,8 +84,17 @@ void TxViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     }
     QFont f = painter->font();
     f.setBold(true);
-    painter->setPen(QColor("#45acbd"));
-     painter->setFont(f);
+   
+    if ((index.data(TransactionTableModel::TypeRole).toInt()) == 2)
+    {
+        painter->setPen(QColor("#ff0000"));
+    }   
+    else
+    {
+        painter->setPen(QColor("#45acbd"));
+    }
+        
+    painter->setFont(f);
     painter->drawText(amountRect, Qt::AlignRight|Qt::AlignVCenter, amountText);
     f.setBold(false);
      painter->setFont(f);
@@ -101,6 +113,13 @@ void TxViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     painter->setFont(f);
     painter->drawText(dateRect2, Qt::AlignHCenter|Qt::AlignTop, dateString);
 
+    f.setPointSize(f.pointSize()*0.8);
+    painter->setFont(f);
+    if (mainRect.width() > 450)
+    {
+        painter->drawText(addressRectMain, Qt::AlignLeft|Qt::AlignVCenter, addressMain);
+    }
+
 
     if(found){
 
@@ -112,7 +131,7 @@ void TxViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         painter->drawImage(detailsRect.x(),detailsRect.y() + mainRect.height()*0.5 -details.height()*0.5,details);
     }
     if(found){
-        f.setPointSize(f.pointSize()*0.5);
+        f.setPointSize(f.pointSize()*0.7);
            f.setBold(true);
         painter->setFont(f);
         QFontMetrics mt(painter->font());
@@ -137,8 +156,17 @@ void TxViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         }
         f.setBold(true);
         painter->setFont(f);
+        
         QRect confirmationsRect2(addressRect2.bottomLeft().x(),mainRect.bottomLeft().y()+mt.height()+4+mt.height()+6, mainRect.width(),mt.height()+2);
         QRect confirmationsRectValue2(addressRect2.bottomLeft().x(),mainRect.bottomLeft().y()+mt.height()+4+mt.height()+4+mt.height()+2, mainRect.width(),mt.height()+2);
+
+        if (mainRect.width() > 450)
+        {
+            confirmationsRect2.setX(addressRect2.x() + 350);
+            confirmationsRect2.setY(addressRect2.y());
+            confirmationsRectValue2.setX(addressRect2.x() + 350);
+            confirmationsRectValue2.setY(addressRectValue2.y());
+        }
         painter->drawText(confirmationsRect2, Qt::AlignLeft|Qt::AlignTop, "CONFIRMATIONS");
         f.setBold(false);
         painter->setFont(f);
@@ -151,16 +179,26 @@ void TxViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         }
         QRect idRect2(mainRect.bottomLeft().x()+6,confirmationsRectValue2.bottomLeft().y()+6, mainRect.width(),mt.height()+2);
         QRect idValue2(mainRect.bottomLeft().x()+6,confirmationsRectValue2.bottomLeft().y()+6+mt.height()+2, mainRect.width(),mt.height()+2);
+        if (mainRect.width() > 450)
+        {
+            idRect2.setY(mainRect.bottomLeft().y()+mt.height()+4+mt.height()+6);
+            idValue2.setY(mainRect.bottomLeft().y()+mt.height()+4+mt.height()+4+mt.height()+2);
+        }
         f.setBold(true);
         painter->setFont(f);
         painter->drawText(idRect2, Qt::AlignLeft|Qt::AlignTop, "TRANSACTION ID");
         f.setBold(false);
         painter->setFont(f);
-        painter->drawText(idValue2, Qt::AlignLeft|Qt::AlignTop, txid);
+        painter->drawText(idValue2, Qt::AlignLeft|Qt::AlignTop, txid.remove(64, 4));
 
 
-        QRect dateRect2(mainRect.bottomLeft().x()+6+mainRect.width()*0.6,mainRect.bottomLeft().y(), mainRect.width(),mt.height()+2);
-        QRect dateRectValue2(mainRect.bottomLeft().x()+6+mainRect.width()*0.6,mainRect.bottomLeft().y()+mt.height()+2, mainRect.width(),mt.height()+2);
+        QRect dateRect2(mainRect.bottomLeft().x()+30+mainRect.width()*0.6,mainRect.bottomLeft().y(), mainRect.width(),mt.height()+2);
+        QRect dateRectValue2(mainRect.bottomLeft().x()+30+mainRect.width()*0.6,mainRect.bottomLeft().y()+mt.height()+2, mainRect.width(),mt.height()+2);
+        if (mainRect.width() > 450)
+        {
+            dateRect2.setX(dateRect2.x() + 100);
+            dateRectValue2.setX(dateRectValue2.x() + 100);
+        }
         f.setBold(true);
         painter->setFont(f);
         painter->drawText(dateRect2, Qt::AlignLeft|Qt::AlignTop, "DATE");
@@ -169,8 +207,13 @@ void TxViewDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
         painter->drawText(dateRectValue2, Qt::AlignLeft|Qt::AlignTop, date.toString("dd/MM/yyyy HH:mm:ss"));
 
 
-        QRect priceRect2(mainRect.bottomLeft().x()+6+mainRect.width()*0.6,mainRect.bottomLeft().y()+mt.height()+2+mt.height()+6, mainRect.width(),mt.height()+2);
-        QRect priceRectValue2(mainRect.bottomLeft().x()+6+mainRect.width()*0.6,mainRect.bottomLeft().y()+mt.height()+2+mt.height()+6+mt.height()+2, mainRect.width(),mt.height()+2);
+        QRect priceRect2(mainRect.bottomLeft().x()+30+mainRect.width()*0.6,mainRect.bottomLeft().y()+mt.height()+2+mt.height()+6, mainRect.width(),mt.height()+2);
+        QRect priceRectValue2(mainRect.bottomLeft().x()+30+mainRect.width()*0.6,mainRect.bottomLeft().y()+mt.height()+2+mt.height()+6+mt.height()+2, mainRect.width(),mt.height()+2);
+        if (mainRect.width() > 450)
+        {
+            priceRect2.setX(priceRect2.x() + 100);
+            priceRectValue2.setX(priceRectValue2.x() + 100);
+        }
         f.setBold(true);
         painter->setFont(f);
         painter->drawText(priceRect2, Qt::AlignLeft|Qt::AlignTop, "PRICE");

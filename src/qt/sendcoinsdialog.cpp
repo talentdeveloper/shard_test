@@ -69,7 +69,7 @@ SendCoinsDialog::SendCoinsDialog(QWidget *parent) :
     connect(clipboardBytesAction, SIGNAL(triggered()), this, SLOT(coinControlClipboardBytes()));
     connect(clipboardLowOutputAction, SIGNAL(triggered()), this, SLOT(coinControlClipboardLowOutput()));
     connect(clipboardChangeAction, SIGNAL(triggered()), this, SLOT(coinControlClipboardChange()));
-    ui->labelCoinControlQuantity->addAction(clipboardQuantityAction);
+//    ui->labelCoinControlQuantity->addAction(clipboardQuantityAction);
     ui->labelCoinControlAmount->addAction(clipboardAmountAction);
     ui->labelCoinControlFee->addAction(clipboardFeeAction);
     ui->labelCoinControlAfterFee->addAction(clipboardAfterFeeAction);
@@ -316,6 +316,53 @@ SendCoinsEntry *SendCoinsDialog::addEntry()
     ui->scrollAreaWidgetContents->resize(ui->scrollAreaWidgetContents->sizeHint());
     QCoreApplication::instance()->processEvents();
     QScrollBar* bar = ui->scrollArea->verticalScrollBar();
+    bar->setStyleSheet(QString::fromUtf8("QScrollBar:vertical {"              
+    "    border: 1px solid;"
+    "       border-color: #0a1c2b;"
+    "    background: #001B26;"
+    "    width:10px;    "
+    "    margin: 0px 0px 0px 0px;"
+    "       border-radius:30px;"
+    "       border-style: outset;"
+    "}"
+    // "QScrollBar::handle:vertical {"
+    // "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
+    // "    stop: 0 rgb(0, 55, 80), stop: 0.5 rgb(0, 55, 80), stop:1 rgb(0, 55, 80));"
+    // "    min-height: 0px;"
+    // "       border-radius:30px;"
+    // "}"
+
+// "QSlider::groove:vertical {"
+//     "border: 1px solid #999999;"
+//     "height: 8px;"
+//     "background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);"
+//     "margin: 2px 0;"
+// "}"
+
+    "QScrollBar::handle:vertical {"
+    "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0, 55, 80), stop:1 rgb(0, 55, 80));"
+    "border: 1px solid rgb(0, 55, 80);"
+    "width: 18px;"
+    "margin: -2px 0;"
+    "border-radius: 4px;"
+"}"
+    "QScrollBar::add-line:vertical {"
+    "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
+    "    stop: 0 rgb(32, 47, 130), stop: 0.5 rgb(32, 47, 130),  stop:1 rgb(32, 47, 130));"
+    "    height: 0px;"
+    "    subcontrol-position: bottom;"
+    "    subcontrol-origin: margin;"
+    "}"
+    "QScrollBar::sub-line:vertical {"
+    "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
+    "    stop: 0  rgb(32, 47, 130), stop: 0.5 rgb(32, 47, 130),  stop:1 rgb(32, 47, 130));"
+    "    height: 0 px;"
+    "    subcontrol-position: top;"
+    "    subcontrol-origin: margin;"
+    "}"
+    ));
+
+
     if(bar)
         bar->setSliderPosition(bar->maximum());
     ui->entries->update();
@@ -406,7 +453,7 @@ void SendCoinsDialog::setBalance(qint64 balance, qint64 stake, qint64 unconfirme
 
     if(model && model->getOptionsModel())
     {
-        ui->labelBalance->setText(BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), balance));
+//        ui->labelBalance->setText(BitcoinUnits::formatWithUnit(model->getOptionsModel()->getDisplayUnit(), balance));
     }
 }
 
@@ -418,7 +465,7 @@ void SendCoinsDialog::updateDisplayUnit()
 // Coin Control: copy label "Quantity" to clipboard
 void SendCoinsDialog::coinControlClipboardQuantity()
 {
-    QApplication::clipboard()->setText(ui->labelCoinControlQuantity->text());
+//    QApplication::clipboard()->setText(ui->labelCoinControlQuantity->text());
 }
 
 // Coin Control: copy label "Amount" to clipboard

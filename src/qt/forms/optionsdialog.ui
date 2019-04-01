@@ -23,7 +23,38 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="styleSheet">
-      <string notr="true">color:white</string>
+      <string notr="true">QTabWidget{border:0px solid #0a2634;color:white;}
+QTabBar{color:white;background:#0a2634;}
+QTabBar::tab {
+    background: #002d3f;
+    border: 1px solid #002d3f;
+    padding: 2px;
+}
+
+QTabBar::tab:selected{
+    background: #0a2634;
+
+}
+
+QTabBar::tab:hover {
+    background: #003750;border:0px;color:white;
+}
+QTabBar::tab:selected:hover {
+    background: #0a2634;border:0px;
+}
+QTabBar::tab:selected {
+    border-color: #0a2634;
+
+}
+
+QTabBar::tab:!selected {
+    margin-top: 2px; /* make non-selected tabs look smaller */
+color:gray;
+}
+QTabBar::tab:hover:!selected {
+    margin-top: 2px; /* make non-selected tabs look smaller */
+color:white;
+}</string>
      </property>
      <property name="tabPosition">
       <enum>QTabWidget::North</enum>

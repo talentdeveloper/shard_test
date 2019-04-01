@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>860</width>
+    <width>870</width>
     <height>629</height>
    </rect>
   </property>
@@ -39,15 +39,21 @@
         <property name="enabled">
          <bool>true</bool>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>467</height>
+         </size>
+        </property>
         <property name="styleSheet">
          <string notr="true">background:'#102537';
-margin-top:10px;</string>
+margin-top:0px;</string>
         </property>
         <widget class="QLabel" name="label_3">
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>70</y>
+           <y>60</y>
            <width>101</width>
            <height>21</height>
           </rect>
@@ -63,7 +69,7 @@ margin-top:10px;</string>
          <property name="geometry">
           <rect>
            <x>230</x>
-           <y>70</y>
+           <y>60</y>
            <width>181</width>
            <height>21</height>
           </rect>
@@ -84,13 +90,15 @@ margin-top:10px;</string>
            <x>310</x>
            <y>10</y>
            <width>101</width>
-           <height>41</height>
+           <height>31</height>
           </rect>
          </property>
          <property name="styleSheet">
           <string notr="true">QComboBox#changeTime {
     background:&quot;#0b1d2c&quot;;
-    border:0px;
+     border:2px solid;
+border-color: rgb(11, 56, 77);
+border-radius:5px;
     color:white;
     outline: none;
     padding-left:5px;
@@ -121,12 +129,24 @@ margin-top:10px;</string>
        background: &quot;#0b1d2c&quot;;
     }
     QComboBox#changeTime:checked:hover {
-        background: &quot;#002d3&quot;;&quot;
+        background: &quot;#002d3&quot;;
  }
 QComboBox#changeTime:disabled { 
     background: &quot;#0a2634&quot;;
 	color:gray;
  }
+
+ QComboBox:item:hover{
+	background-color: &quot;#0a2634&quot;;
+	color: &quot;#0a2634&quot;;
+}
+QComboBox::item:selected {
+backgrounds: &quot;#0045ff&quot;;
+}
+
+QComboBox QAbstractItemView::item{color: white;}
+QComboBox QAbstractItemView::item:hover{color: white;}
+QComboBox QAbstractItemView::item:selected{background-color: blue;}
     </string>
          </property>
          <property name="currentText">
@@ -139,19 +159,20 @@ QComboBox#changeTime:disabled {
         <widget class="QComboBox" name="graphSelector">
          <property name="geometry">
           <rect>
-           <x>50</x>
+           <x>51</x>
            <y>10</y>
            <width>161</width>
-           <height>41</height>
+           <height>31</height>
           </rect>
          </property>
          <property name="styleSheet">
           <string notr="true">QComboBox {
-    background:&quot;#0a2634&quot;;
-    border:0px;
+    background:&quot;#102537&quot;;
+    border:0;
+border-radius:5px;
     color:white;
     outline: none;
-    padding-left:5px;
+    padding-left:0px;
 	font-size:20px;
    }
    QComboBox::drop-down {
@@ -186,7 +207,17 @@ QComboBox:disabled {
     background: &quot;#0a2634&quot;;
 	color:gray;
  }
-    </string>
+ QComboBox:item:hover{
+	background-color: &quot;#0a2634&quot;;
+	color: &quot;#0a2634&quot;;
+}
+QComboBox::item:selected {
+backgrounds: &quot;#0045ff&quot;;
+}
+
+QComboBox QAbstractItemView::item{color: white;}
+QComboBox QAbstractItemView::item:hover{color: white;}
+QComboBox QAbstractItemView::item:selected{background-color: blue;}</string>
          </property>
         </widget>
         <widget class="QLabel" name="label_11">
@@ -206,16 +237,25 @@ QComboBox:disabled {
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>100</y>
+           <y>90</y>
            <width>401</width>
            <height>371</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="spacing">
+           <number>6</number>
+          </property>
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_2">
+            <property name="spacing">
+             <number>3</number>
+            </property>
             <item>
              <widget class="QCustomPlot" name="graphView" native="true">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                 <horstretch>0</horstretch>
@@ -235,8 +275,14 @@ QComboBox:disabled {
              <layout class="QVBoxLayout" name="verticalLayout_5">
               <item>
                <widget class="QLabel" name="label_4">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="styleSheet">
-                 <string notr="true">color:gray</string>
+                 <string notr="true">color:gray;margin-top:-1px;</string>
                 </property>
                 <property name="text">
                  <string>MCAP:</string>
@@ -271,8 +317,14 @@ QComboBox:disabled {
              <layout class="QVBoxLayout" name="verticalLayout_9">
               <item>
                <widget class="QLabel" name="label_6">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="styleSheet">
-                 <string notr="true">color:gray</string>
+                 <string notr="true">color:gray;margin-top:-4px;</string>
                 </property>
                 <property name="text">
                  <string>Change (24h):</string>
@@ -307,8 +359,14 @@ QComboBox:disabled {
              <layout class="QVBoxLayout" name="verticalLayout_10">
               <item>
                <widget class="QLabel" name="label_10">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="styleSheet">
-                 <string notr="true">color:gray</string>
+                 <string notr="true">color:gray;margin-top:-4px;</string>
                 </property>
                 <property name="text">
                  <string>Volume (24h):</string>
@@ -347,7 +405,7 @@ QComboBox:disabled {
          <property name="geometry">
           <rect>
            <x>-10</x>
-           <y>56</y>
+           <y>45</y>
            <width>441</width>
            <height>20</height>
           </rect>
@@ -370,9 +428,15 @@ QComboBox:disabled {
      <layout class="QVBoxLayout" name="verticalLayout_6">
       <item>
        <widget class="QWidget" name="ui_graph" native="true">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>467</height>
+         </size>
+        </property>
         <property name="styleSheet">
          <string notr="true">background:'#102537';
-margin-top:10px;</string>
+margin-top:0px;</string>
         </property>
         <widget class="ListTransactions" name="listTransactions">
          <property name="geometry">
@@ -390,16 +454,18 @@ margin-top:10px;</string>
         <widget class="QPushButton" name="moreButton">
          <property name="geometry">
           <rect>
-           <x>330</x>
+           <x>280</x>
            <y>10</y>
-           <width>81</width>
+           <width>120</width>
            <height>41</height>
           </rect>
          </property>
          <property name="styleSheet">
           <string notr="true">QPushButton { 
  background-color: &quot;#0b1d2c&quot;;
-	border:1px solid gray;
+	border:1px solid gray; border:2px solid;
+border-color: rgb(11, 56, 77);
+border-radius:5px;
 	color:white;
 	outline: none;
 
@@ -441,7 +507,7 @@ border:1px solid gray;
 </string>
          </property>
          <property name="text">
-          <string>MORE</string>
+          <string>VIEW MORE</string>
          </property>
          <property name="flat">
           <bool>false</bool>
@@ -588,9 +654,9 @@ border:0px</string>
       <widget class="QGroupBox" name="groupBox_5">
        <property name="geometry">
         <rect>
-         <x>590</x>
+         <x>589</x>
          <y>0</y>
-         <width>141</width>
+         <width>131</width>
          <height>141</height>
         </rect>
        </property>
@@ -649,7 +715,7 @@ font-size:10px</string>
       <widget class="QGroupBox" name="groupBox">
        <property name="geometry">
         <rect>
-         <x>730</x>
+         <x>720</x>
          <y>0</y>
          <width>131</width>
          <height>151</height>
@@ -725,9 +791,9 @@ border:0px</string>
       <widget class="QGroupBox" name="groupBox_4">
        <property name="geometry">
         <rect>
-         <x>270</x>
+         <x>262</x>
          <y>0</y>
-         <width>321</width>
+         <width>327</width>
          <height>141</height>
         </rect>
        </property>
@@ -742,7 +808,7 @@ border:0px</string>
          <rect>
           <x>0</x>
           <y>30</y>
-          <width>321</width>
+          <width>327</width>
           <height>20</height>
          </rect>
         </property>
@@ -767,9 +833,34 @@ border:0px</string>
          <rect>
           <x>6</x>
           <y>50</y>
-          <width>311</width>
+          <width>327</width>
           <height>61</height>
          </rect>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color:white;</string>
+        </property>
+        <property name="text">
+         <string>0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelTotalPrice">
+        <property name="geometry">
+         <rect>
+          <x>6</x>
+          <y>110</y>
+          <width>327</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
         <property name="styleSheet">
          <string notr="true">color:white;</string>
@@ -785,7 +876,7 @@ border:0px</string>
       <widget class="QGroupBox" name="groupBox_6">
        <property name="geometry">
         <rect>
-         <x>140</x>
+         <x>131</x>
          <y>0</y>
          <width>131</width>
          <height>141</height>
@@ -800,7 +891,7 @@ border:0px</string>
        <widget class="QLabel" name="label_8">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>0</x>
           <y>40</y>
           <width>131</width>
           <height>20</height>
@@ -826,9 +917,9 @@ font-size:10px</string>
        <widget class="QLabel" name="labelStake">
         <property name="geometry">
          <rect>
-          <x>16</x>
+          <x>0</x>
           <y>60</y>
-          <width>121</width>
+          <width>131</width>
           <height>41</height>
          </rect>
         </property>

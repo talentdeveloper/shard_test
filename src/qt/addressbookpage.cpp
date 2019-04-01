@@ -16,6 +16,7 @@
 #include <QClipboard>
 #include <QMessageBox>
 #include <QMenu>
+#include <QScrollBar>
 
 AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
     QDialog(parent),
@@ -51,14 +52,14 @@ AddressBookPage::AddressBookPage(Mode mode, Tabs tab, QWidget *parent) :
     switch(tab)
     {
     case SendingTab:
-        ui->l_rec->setText("Address book");
+        ui->l_rec->setText("Add Address");
         ui->deleteButton->setVisible(true);
 
         ui->signMessage->setVisible(false);
         break;
     case ReceivingTab:
-        ui->l_rec->setText("Receive");
-
+        ui->l_rec->setText("Generate    Address");
+        ui->l_rec->setWordWrap(true);
         ui->deleteButton->setVisible(false);
         ui->signMessage->setVisible(true);
         break;
@@ -154,6 +155,39 @@ void AddressBookPage::setModel(AddressTableModel *model)
     ui->tableView->horizontalHeader()->setResizeMode(
             AddressTableModel::Label, QHeaderView::Stretch);
 
+    ui->tableView->verticalScrollBar()->setStyleSheet(QString::fromUtf8("QScrollBar:vertical {"              
+    "    border: 1px solid;"
+    "       border-color: #0a1c2b;"
+    "    background: #001B26;"
+    "    width:10px;    "
+    "    margin: 0px 0px 0px 0px;"
+    "       border-radius:30px;"
+    "       border-style: outset;"
+    "}"
+
+    "QScrollBar::handle:vertical {"
+    "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0, 55, 80), stop:1 rgb(0, 55, 80));"
+    "border: 1px solid rgb(0, 55, 80);"
+    "width: 18px;"
+    "margin: -2px 0;"
+    "border-radius: 4px;"
+    "}"
+    "QScrollBar::add-line:vertical {"
+    "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
+    "    stop: 0 rgb(32, 47, 130), stop: 0.5 rgb(32, 47, 130),  stop:1 rgb(32, 47, 130));"
+    "    height: 0px;"
+    "    subcontrol-position: bottom;"
+    "    subcontrol-origin: margin;"
+    "}"
+    "QScrollBar::sub-line:vertical {"
+    "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
+    "    stop: 0  rgb(32, 47, 130), stop: 0.5 rgb(32, 47, 130),  stop:1 rgb(32, 47, 130));"
+    "    height: 0 px;"
+    "    subcontrol-position: top;"
+    "    subcontrol-origin: margin;"
+    "}"
+    ));
+
 
 
 
@@ -224,7 +258,7 @@ void AddressBookPage::on_verifyMessage_clicked()
     }
 }
 
-void AddressBookPage::on_newAddressButton_clicked()
+void AddressBookPage::on_pushButton_clicked()
 {
     if(!model)
         return;
@@ -290,6 +324,9 @@ void AddressBookPage::selectionChanged()
             QString address = indexes[0].data().toString();
             ui->addressEdit->setText(address);
 
+            QModelIndexList lbl_indexes = table->selectionModel()->selectedRows(AddressTableModel::Label);
+            QString label = lbl_indexes[0].data().toString();
+            ui->labelEdit->setText(label);
 
             break;
         }

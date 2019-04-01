@@ -18,6 +18,7 @@ BitcoinAmountField::BitcoinAmountField(QWidget *parent):
     amount->setDecimals(8);
     amount->installEventFilter(this);
     amount->setMinimumWidth(350);
+    amount->setMinimumHeight(41);
     amount->setSingleStep(0.001);
 
     QHBoxLayout *layout = new QHBoxLayout(this);
@@ -27,7 +28,10 @@ BitcoinAmountField::BitcoinAmountField(QWidget *parent):
 
     unit = new QValueComboBox(this);
     unit->setModel(new BitcoinUnits(this));
-    unit->setStyleSheet("background:#003750;\ncolor:white;\npadding:2px;\nborder-radius:5px;border-top-left-radius:0px;border-bottom-left-radius:0px;margin-left:-1px");
+    unit->setStyleSheet("QComboBox::down-arrow {image: url(:/images/res/images/dropdown.png); }  QComboBox::drop-down { border:0px; margin-right:10px; } background:#003750;\ncolor:white;\npadding:2px;\nborder-radius:5px;border-top-left-radius:0px;border-bottom-left-radius:0px;margin-left:-1px");
+
+   
+    unit->setMinimumHeight(41);
 
     layout->addWidget(unit);
 

@@ -38,9 +38,47 @@ OverviewPage::OverviewPage(QWidget *parent) :
     ui->listTransactions->setEditTriggers(QAbstractItemView::AnyKeyPressed);
     ui->listTransactions->setResizeMode(QListView::Adjust);
     ui->listTransactions->setStyleSheet("QListView{ border:0px;} QListView::item{border:1px white;}");
+    ui->listTransactions->verticalScrollBar()->setStyleSheet(QString::fromUtf8("QScrollBar:vertical {"              
+    "    border: 1px solid;"
+    "       border-color: #0a1c2b;"
+    "    background: #001B26;"
+    "    width:10px;    "
+    "    margin: 0px 0px 0px 0px;"
+    "       border-radius:30px;"
+    "       border-style: outset;"
+    "}"
+
+    "QScrollBar::handle:vertical {"
+    "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0, 55, 80), stop:1 rgb(0, 55, 80));"
+    "border: 1px solid rgb(0, 55, 80);"
+    "width: 18px;"
+    "margin: -2px 0;"
+    "border-radius: 4px;"
+    "}"
+    "QScrollBar::add-line:vertical {"
+    "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
+    "    stop: 0 rgb(32, 47, 130), stop: 0.5 rgb(32, 47, 130),  stop:1 rgb(32, 47, 130));"
+    "    height: 0px;"
+    "    subcontrol-position: bottom;"
+    "    subcontrol-origin: margin;"
+    "}"
+    "QScrollBar::sub-line:vertical {"
+    "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
+    "    stop: 0  rgb(32, 47, 130), stop: 0.5 rgb(32, 47, 130),  stop:1 rgb(32, 47, 130));"
+    "    height: 0 px;"
+    "    subcontrol-position: top;"
+    "    subcontrol-origin: margin;"
+    "}"
+    ));
+
     QFont bal = ui->labelBalance->font();
     bal.setPointSizeF(40);
     ui->labelBalance->setFont(bal);
+
+    // Added for Total Price
+    QFont totalPriceFont = ui->labelTotalPrice->font();
+    totalPriceFont.setPointSizeF(20);
+    ui->labelTotalPrice->setFont(totalPriceFont);
 
     QFont stake = ui->labelStake->font();
     stake.setPointSizeF(30);
@@ -49,7 +87,7 @@ OverviewPage::OverviewPage(QWidget *parent) :
     QFont unconfirmed = ui->labelUnconfirmed->font();
     unconfirmed.setPointSizeF(30);
     ui->labelUnconfirmed->setFont(unconfirmed);
-    ui->graphView->setBackground(QColor("#0a2634"));
+    ui->graphView->setBackground(QColor("#102537"));
     ui->graphView->setLocale(QLocale(QLocale::English, QLocale::UnitedKingdom));
     ui->graphView->addGraph();
     ui->graphView->graph()->setLineStyle(QCPGraph::lsLine);
@@ -72,6 +110,7 @@ OverviewPage::OverviewPage(QWidget *parent) :
     ui->graphView->yAxis->grid()->setVisible(false);
     ui->graphView->xAxis->setTicker(dateTicker);
 
+    ui->changeTime->setItemDelegate(new QStyledItemDelegate());
     ui->changeTime->addItem("5 minutes");
     ui->changeTime->addItem("15 minutes");
     ui->changeTime->addItem("30 minutes");
@@ -80,7 +119,8 @@ OverviewPage::OverviewPage(QWidget *parent) :
     ui->changeTime->addItem("1 week");
     ui->changeTime->addItem("1 month");
     ui->changeTime->setCurrentIndex(4);
-
+    
+    ui->graphSelector->setItemDelegate(new QStyledItemDelegate());
     ui->graphSelector->addItem("Price Graph");
     ui->graphSelector->addItem("Balance Graph");
     ui->graphSelector->addItem("Staked Graph");
@@ -215,6 +255,13 @@ void OverviewPage::toRecieve(){
 void OverviewPage::toSend(){
     emit sendTransaction();
 }
+
+// void OverViewPage::updateTotalPrice(Qstring answer, qint64 balance){
+//     QJsonDocument doc = QJsonDocument::fromJson(answer.toUtf8());
+//     if(!doc.isNull()){
+//         ui->labelTotalPrice->setText("$ " + 10 * model->getBalance());
+//     }
+// }
 void OverviewPage::priceChanged(QString answer){
     QJsonDocument doc = QJsonDocument::fromJson(answer.toUtf8());
     if(!doc.isNull()){
@@ -223,15 +270,16 @@ void OverviewPage::priceChanged(QString answer){
         double volume  = obj.value("volume").toDouble();
         double market  = obj.value("market cap").toDouble();
         double change = obj.value("change").toDouble();
-
+        this->realtimePrice = price;
         ui->m_price->setText("$ "+QString::number(price,'f',6)+" / SHARD");
         ui->m_change->setText(QString::number(change,'f',2)+" %");
         ui->m_cap->setText(QString::number(market,'f',2)+" $");
         ui->m_volume->setText(QString::number(volume,'f',2)+" $");
         txdelegate->setPrice(price);
         int height = ui->listTransactions->height();
-        ui->listTransactions->setFixedHeight(height+1);
         ui->listTransactions->setFixedHeight(height);
+        // WalletModel *model = new WalletModel();
+        // ui->labelTotalPrice->setText("$ " + 10 * model->getBalance());
 
     }
 }
@@ -383,6 +431,17 @@ void OverviewPage::setBalance(qint64 balance, qint64 stake, qint64 unconfirmedBa
         ft.setPointSizeF(35*aux*0.95);
     }
     ui->labelBalance->setFont(ft);
+
+    // Add total price
+    
+    // QFont fontTotalPrice = ui->lableTotalPrice->font();
+    // QFontMetrics mtTotalPrice(fontTotalPrice);
+    // fontTotalPrice.setPointSizeF(15);
+    QString s1;
+    s1.setNum(this->realtimePrice * balance / 100000000.00);
+    ui->labelTotalPrice->setText("$ " + s1);
+
+
     ui->labelStake->setText(BitcoinUnits::formatWithUnit(unit, stake).split(' ')[0]);
 
     QFont ft2 = ui->labelStake->font();
@@ -441,13 +500,15 @@ void OverviewPage::setWalletModel(WalletModel *model)
         filter->setDynamicSortFilter(true);
         filter->setSortRole(Qt::EditRole);
         filter->setShowInactive(false);
-        filter->sort(TransactionTableModel::Status, Qt::DescendingOrder);
+        //filter->sort(TransactionTableModel::Status, Qt::DescendingOrder);
+        filter->sort(TransactionTableModel::Date, Qt::DescendingOrder);
 
-        ui->listTransactions->setModel(model->getTransactionTableModel());
+        ui->listTransactions->setModel(filter);
         ui->listTransactions->setModelColumn(TransactionTableModel::ToAddress);
 
         // Keep up to date with wallet
         setBalance(model->getBalance(), model->getStake(), model->getUnconfirmedBalance(), model->getImmatureBalance());
+        // updateTotalPrice(, model->getBalance());
         connect(model, SIGNAL(balanceChanged(qint64, qint64, qint64, qint64)), this, SLOT(setBalance(qint64, qint64, qint64, qint64)));
 
         connect(model->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));

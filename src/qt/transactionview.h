@@ -15,6 +15,7 @@ class QMenu;
 class QFrame;
 class TxViewDelegate;
 class QDateTimeEdit;
+class QSignalMapper;
 QT_END_NAMESPACE
 
 /** Widget showing the transaction list for a wallet, including a filter row.
@@ -58,6 +59,8 @@ private:
     QDateTimeEdit *dateFrom;
     QDateTimeEdit *dateTo;
 
+    QSignalMapper *mapperThirdPartyTxUrls;
+
     QWidget *createDateRangeWidget();
 
 private slots:
@@ -69,6 +72,7 @@ private slots:
     void copyLabel();
     void copyAmount();
     void copyTxID();
+    void openThirdPartyTxUrl(QString url);
 
 
 signals:

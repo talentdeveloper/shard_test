@@ -29,6 +29,8 @@
 #include "txviewdelegate.h"
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QSignalMapper>
+#include <QDesktopServices>
 TransactionView::TransactionView(QWidget *parent) :
     QWidget(parent), model(0), transactionProxyModel(0),
     transactionView(0),m_delegate(new TxViewDelegate())
@@ -36,6 +38,7 @@ TransactionView::TransactionView(QWidget *parent) :
     // Build filter row
     setContentsMargins(0,0,0,0);
     setStyleSheet("background:#0a2634");
+    setGeometry(QRect(0, 0, 890, 51));
     QHBoxLayout *hlayout = new QHBoxLayout();
     hlayout->setContentsMargins(0,0,0,0);
 
@@ -44,7 +47,7 @@ TransactionView::TransactionView(QWidget *parent) :
     dateWidget->setItemDelegate(new QStyledItemDelegate());
 
     dateWidget->setObjectName(QStringLiteral("dateWidget"));
-    dateWidget->setGeometry(QRect(16, 10, 107, 51));
+    dateWidget->setGeometry(QRect(0, 0, 120, 51));
     dateWidget->setStyleSheet(QLatin1String("QComboBox#dateWidget { \n"
     "    background: \"#002d3f\";\n"
     "	border:0px;\n"
@@ -97,10 +100,10 @@ TransactionView::TransactionView(QWidget *parent) :
     dateWidget->addItem(tr("Last month"), LastMonth);
     dateWidget->addItem(tr("This year"), ThisYear);
     dateWidget->addItem(tr("Range..."), Range);
-    QLabel* title = new QLabel();
-    title->setStyleSheet("color:white;\nfont-size:18px;padding:15px;");
-    title->setText("<img src=\":/images/res/images/transactions.png\">&nbsp;&nbsp;&nbsp;&nbsp;List Transactions");
-    title->setMaximumHeight(50);
+    // QLabel* title = new QLabel();
+    // title->setStyleSheet("color:white;\nfont-size:18px;padding:15px;");
+    // title->setText("<img src=\":/images/res/images/transactions.png\">&nbsp;&nbsp;&nbsp;&nbsp;List Transactions");
+    // title->setMaximumHeight(50);
     hlayout->addWidget(dateWidget);
 
     qt->setLayout(hlayout);
@@ -200,7 +203,7 @@ TransactionView::TransactionView(QWidget *parent) :
     vlayout->setContentsMargins(0,0,0,0);
 
 
-    vlayout->addWidget(title);
+    // vlayout->addWidget(title);
     ListTransactions *view = new ListTransactions(this);
     qt->setMaximumHeight(50);
     vlayout->addWidget(qt);
@@ -224,6 +227,41 @@ TransactionView::TransactionView(QWidget *parent) :
 #else
     hlayout->addSpacing(width);
 #endif
+    // view->verticalScrollBar()->setItemDelegate(new QStyledItemDelegate());
+    view->verticalScrollBar()->setStyleSheet(QString::fromUtf8("QScrollBar:vertical {"              
+    "    border: 1px solid;"
+    "       border-color: #0a1c2b;"
+    "    background: #001B26;"
+    "    width:10px;    "
+    "    margin: 0px 0px 0px 0px;"
+    "       border-radius:30px;"
+    "       border-style: outset;"
+    "}"
+
+    "QScrollBar::handle:vertical {"
+    "background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 rgb(0, 55, 80), stop:1 rgb(0, 55, 80));"
+    "border: 1px solid rgb(0, 55, 80);"
+    "width: 18px;"
+    "margin: -2px 0;"
+    "border-radius: 4px;"
+    "}"
+    "QScrollBar::add-line:vertical {"
+    "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
+    "    stop: 0 rgb(32, 47, 130), stop: 0.5 rgb(32, 47, 130),  stop:1 rgb(32, 47, 130));"
+    "    height: 0px;"
+    "    subcontrol-position: bottom;"
+    "    subcontrol-origin: margin;"
+    "}"
+    "QScrollBar::sub-line:vertical {"
+    "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
+    "    stop: 0  rgb(32, 47, 130), stop: 0.5 rgb(32, 47, 130),  stop:1 rgb(32, 47, 130));"
+    "    height: 0 px;"
+    "    subcontrol-position: top;"
+    "    subcontrol-origin: margin;"
+    "}"
+    ));
+
+
     // Always show scroll bar
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     view->setTabKeyNavigation(false);
@@ -247,7 +285,12 @@ TransactionView::TransactionView(QWidget *parent) :
     contextMenu->addAction(editLabelAction);
     contextMenu->addAction(showDetailsAction);
 
+    mapperThirdPartyTxUrls = new QSignalMapper(this);
+
+
     // Connect actions
+    connect(mapperThirdPartyTxUrls, static_cast<void (QSignalMapper::*)(const QString&)>(&QSignalMapper::mapped), this, &TransactionView::openThirdPartyTxUrl);
+
     connect(dateWidget, SIGNAL(activated(int)), this, SLOT(chooseDate(int)));
     connect(typeWidget, SIGNAL(activated(int)), this, SLOT(chooseType(int)));
     connect(addressWidget, SIGNAL(textChanged(QString)), this, SLOT(changedPrefix(QString)));
@@ -275,7 +318,8 @@ void TransactionView::setModel(WalletModel *model)
         transactionProxyModel->setDynamicSortFilter(true);
         transactionProxyModel->setSortRole(Qt::EditRole);
         transactionProxyModel->setShowInactive(false);
-        transactionProxyModel->sort(TransactionTableModel::Status, Qt::DescendingOrder);
+        //transactionProxyModel->sort(TransactionTableModel::Status, Qt::DescendingOrder);
+        transactionProxyModel->sort(TransactionTableModel::Date, Qt::DescendingOrder);
 
 
         transactionProxyModel->setSortRole(Qt::EditRole);
@@ -283,6 +327,25 @@ void TransactionView::setModel(WalletModel *model)
         transactionView->setModel(transactionProxyModel);
         transactionView->setSelectionBehavior(QAbstractItemView::SelectRows);
         transactionView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+        if (model->getOptionsModel())
+        {
+            // Add third party transaction URLs to context menu
+            QStringList listUrls = model->getOptionsModel()->getThirdPartyTxUrls().split("|", QString::SkipEmptyParts);
+            for (int i = 0; i < listUrls.size(); ++i)
+            {
+                QString host = QUrl(listUrls[i].trimmed(), QUrl::StrictMode).host();
+                if (!host.isEmpty())
+                {
+                    QAction *thirdPartyTxUrlAction = new QAction(host, this); // use host as menu item label
+                    if (i == 0)
+                        contextMenu->addSeparator();
+                    contextMenu->addAction(thirdPartyTxUrlAction);
+                    connect(thirdPartyTxUrlAction, &QAction::triggered, mapperThirdPartyTxUrls, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
+                    mapperThirdPartyTxUrls->setMapping(thirdPartyTxUrlAction, listUrls[i].trimmed());
+                }
+            }
+        }
 
     }
 }
@@ -483,14 +546,18 @@ void TransactionView::editLabel()
 
 void TransactionView::showDetails()
 {
-    if(!transactionView->selectionModel())
-        return;
-    QModelIndexList selection = transactionView->selectionModel()->selectedRows();
+    // if(!transactionView->selectionModel())
+    //     return;
+    // QModelIndexList selection = transactionView->selectionModel()->selectedRows();
+    // if(!selection.isEmpty())
+    // {
+    //     TransactionDescDialog dlg(selection.at(0));
+    //     dlg.exec();
+    // }
+    QString url = "http://shardexplorer.com/tx/";
+    QModelIndexList selection = transactionView->selectionModel()->selectedRows(0);
     if(!selection.isEmpty())
-    {
-        TransactionDescDialog dlg(selection.at(0));
-        dlg.exec();
-    }
+         QDesktopServices::openUrl(QUrl::fromUserInput(url.append((selection.at(0).data(TransactionTableModel::TxIDRole).toString()).remove(64, 4))));
 }
 
 QWidget *TransactionView::createDateRangeWidget()
@@ -546,4 +613,14 @@ void TransactionView::focusTransaction(const QModelIndex &idx)
     transactionView->scrollTo(targetIdx);
     transactionView->setCurrentIndex(targetIdx);
     transactionView->setFocus();
+}
+
+
+void TransactionView::openThirdPartyTxUrl(QString url)
+{
+    if(!transactionView || !transactionView->selectionModel())
+        return;
+    QModelIndexList selection = transactionView->selectionModel()->selectedRows(0);
+    if(!selection.isEmpty())
+         QDesktopServices::openUrl(QUrl::fromUserInput(url.replace("%s", selection.at(0).data(TransactionTableModel::TxIDRole).toString())));
 }

@@ -30,6 +30,7 @@ public:
         Language,          // QString
         CoinControlFeatures, // bool
         OptionIDRowCount,
+        ThirdPartyTxUrls,
     };
 
     void Init();
@@ -46,6 +47,7 @@ public:
     int getDisplayUnit();
     bool getCoinControlFeatures();
     QString getLanguage() { return language; }
+    QString getThirdPartyTxUrls() const { return strThirdPartyTxUrls; }
 
 private:
     int nDisplayUnit;
@@ -53,6 +55,7 @@ private:
     bool fMinimizeOnClose;
     bool fCoinControlFeatures;
     QString language;
+    QString strThirdPartyTxUrls;
 
 signals:
     void displayUnitChanged(int unit);

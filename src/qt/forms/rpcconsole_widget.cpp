@@ -344,3 +344,26 @@ void RPCConsole_Widget::on_btnClearTrafficGraph_clicked()
 {
     ui->trafficGraph->clear();
 }
+
+void RPCConsole_Widget::setCurrentTab(Tabs tab)
+{
+    QString tabName = "tab_info";
+
+    switch(tab) {
+    case Info:
+        tabName = "tab_info";
+    break;
+
+    case Console:
+        tabName = "tab_console";
+    break;
+
+    case Network:
+        tabName = "tab";
+    break;
+    }
+
+    QWidget *widget = ui->tabWidget->findChild<QWidget *>(tabName);
+    if(widget)
+        ui->tabWidget->setCurrentWidget(widget);
+}

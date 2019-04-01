@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>872</width>
-    <height>478</height>
+    <width>953</width>
+    <height>629</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,6 +36,21 @@ QHeaderView::up-arrow {
 }</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
     <widget class="QWidget" name="recieveTop" native="true">
      <property name="sizePolicy">
@@ -124,7 +139,7 @@ border:0px</string>
        <rect>
         <x>130</x>
         <y>0</y>
-        <width>780</width>
+        <width>997</width>
         <height>151</height>
        </rect>
       </property>
@@ -132,29 +147,89 @@ border:0px</string>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_5">
          <item>
-          <widget class="QLabel" name="label_address">
-           <property name="styleSheet">
-            <string notr="true">color:white;margin:-5px;margin-left:25px;</string>
-           </property>
-           <property name="text">
-            <string>Address:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="addressEdit">
-           <property name="styleSheet">
-            <string notr="true">background:#003750;
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QLabel" name="label_address">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color:white;margin:-5px;margin-left:25px;</string>
+             </property>
+             <property name="text">
+              <string>Address</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="addressEdit">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background:#003750;
 color:white;
 margin-left:25px;
-margin-right:25px;
+margin-right:280px;
 padding:2px;
 border-radius:5px;</string>
-           </property>
-          </widget>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <widget class="QLabel" name="label_label">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color:white;margin:-5px;margin-left:25px;margin-right:13px;</string>
+             </property>
+             <property name="text">
+              <string>Label</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="labelEdit">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background:#003750;
+color:white;
+margin-left:25px;
+margin-right:280px;
+padding:2px;
+border-radius:5px;</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -170,67 +245,11 @@ border-radius:5px;</string>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
-             <width>25</width>
+             <width>350</width>
              <height>20</height>
             </size>
            </property>
           </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="newAddressButton">
-           <property name="toolTip">
-            <string>Create a new address</string>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton { 
- background-color: &quot;#002d3f&quot;;
-	border:1px solid gray;
-	color:white;
-	outline: none;
-	padding:10px;
-  margin-bottom:15px;
-margin-top:5px;
-}
-
-QPushButton:pressed {
-   background-color: &quot;#002d3f&quot;;
-border:1px solid gray;
-	color:white;
-
-}
-QPushButton:focus:pressed { 
-    background: &quot;#003750&quot;;
-	border:1px solid #0adbf0;
-	color:white;
-
- }
-QPushButton:focus { 
-   background-color: &quot;#002d3f&quot;;
-	border:1px solid gray;
-	color:white;
-
-}
-QPushButton:hover {
-     background-color: &quot;#002d3f&quot;;
-	border:1px solid #0adbf0;
- }
-QPushButton:checked { 
-     background-color: &quot;#002d3f&quot;;
-border:1px solid gray;
-	color:white;
-
- }
-QPushButton:disabled { 
-    background:'#0a2634';
-color:gray;
-border:1px solid gray;
- }
-</string>
-           </property>
-           <property name="text">
-            <string>&amp;New Address</string>
-           </property>
-          </widget>
          </item>
          <item>
           <widget class="QPushButton" name="copyToClipboard">
@@ -240,12 +259,14 @@ border:1px solid gray;
            <property name="styleSheet">
             <string notr="true">QPushButton { 
  background-color: &quot;#002d3f&quot;;
-	border:1px solid gray;
+	border:2px solid;
+	border-color: rgb(11, 56, 77);
 	color:white;
 	outline: none;
 	padding:10px;
   margin-bottom:15px;
 margin-top:5px;
+border-radius:5px;
 }
 
 QPushButton:pressed {
@@ -293,12 +314,14 @@ border:1px solid gray;
            <property name="styleSheet">
             <string notr="true">QPushButton { 
  background-color: &quot;#002d3f&quot;;
-	border:1px solid gray;
+	border:2px solid;
+border-color: rgb(11, 56, 77);
 	color:white;
 	outline: none;
 	padding:10px;
   margin-bottom:15px;
 margin-top:5px;
+border-radius:5px;
 }
 
 QPushButton:pressed {
@@ -349,12 +372,14 @@ border:1px solid gray;
            <property name="styleSheet">
             <string notr="true">QPushButton { 
  background-color: &quot;#002d3f&quot;;
-	border:1px solid gray;
+	border:2px solid;
+border-color: rgb(11, 56, 77);
 	color:white;
 	outline: none;
 	padding:10px;
   margin-bottom:15px;
 margin-top:5px;
+border-radius:5px;
 }
 
 QPushButton:pressed {
@@ -405,12 +430,14 @@ border:1px solid gray;
            <property name="styleSheet">
             <string notr="true">QPushButton { 
  background-color: &quot;#002d3f&quot;;
-	border:1px solid gray;
+	border:2px solid;
+border-color: rgb(11, 56, 77);
 	color:white;
 	outline: none;
 	padding:10px;
   margin-bottom:15px;
 margin-top:5px;
+border-radius:5px;
 }
 
 QPushButton:pressed {
@@ -461,12 +488,14 @@ border:1px solid gray;
            <property name="styleSheet">
             <string notr="true">QPushButton { 
  background-color: &quot;#002d3f&quot;;
-	border:1px solid gray;
+	border:2px solid;
+border-color: rgb(11, 56, 77);
 	color:white;
 	outline: none;
 	padding:10px;
   margin-bottom:15px;
 margin-top:5px;
+border-radius:5px;
 }
 
 QPushButton:pressed {

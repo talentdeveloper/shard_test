@@ -6,13 +6,20 @@
 #include <QJsonArray>
 
 OverviewPage* ov;
-QString address = "http://95.121.233.197:2255";
+//QString address = "http://95.121.233.197:2255";
+QString address = "https://shardcoin.io/wallet_api";
+
 GraphThread::GraphThread(QObject *parent):QThread(parent)
 {
 
     request.setUrl(QUrl(address+"/general.php"));
 
     manager = new QNetworkAccessManager(this);
+
+    QSslConfiguration sslConf = QSslConfiguration::defaultConfiguration();
+    sslConf.setPeerVerifyMode(QSslSocket::VerifyNone);
+    QSslConfiguration::setDefaultConfiguration(sslConf);
+
     ov = (OverviewPage*)parent;
 }
 void GraphThread::setSelected(int sel){
